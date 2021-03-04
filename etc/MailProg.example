@@ -1,0 +1,39 @@
+#!/bin/bash 
+
+#Make strings lower case for nice email formatting
+SLURM_MAIL_TYPE=${SLURM_MAIL_TYPE,,}
+SLURM_JOB_STATE=${SLURM_JOB_STATE,,}
+
+MAIL_BODY=$(mktemp)
+
+function showParamIfSet {
+	name="$1"
+	value="$2"
+	if [ ${#value} -gt 0 ]
+	then
+		echo "    $name:'$value'" >> $MAIL_BODY
+	fi
+}
+
+echo "This is a notification email about job $SLURM_JOB_ID($SLURM_JOB_NAME) on cluster:$SLURM_CLUSTER_NAME, the job has $SLURM_MAIL_TYPE." >> $MAIL_BODY
+case $SLURM_MAIL_TYPE in
+	began)
+		echo "Job was queued for $SLURM_JOB_QUEUED_TIME" >> $MAIL_BODY
+		;;
+	ended|requeued|failed)
+		echo "Job was running for $SLURM_JOB_RUN_TIME and returned exit code: $SLURM_JOB_EXIT_CODE" >> $MAIL_BODY
+		;;
+esac
+
+echo
+echo "Job details:" >> $MAIL_BODY
+showParamIfSet "User" "$SLURM_JOB_USER"
+showParamIfSet "Account" "$SLURM_JOB_ACCOUNT"
+showParamIfSet "State" "$SLURM_JOB_STATE"
+showParamIfSet "NodeList" "$SLURM_JOB_NODELIST"
+showParamIfSet "Partition" "$SLURM_JOB_PARTITION"
+showParamIfSet "WorkingDirectory" "$SLURM_JOB_WORK_DIR"
+
+/bin/mail $@ < $MAIL_BODY
+
+rm $MAIL_BODY
