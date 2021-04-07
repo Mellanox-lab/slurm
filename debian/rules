@@ -44,8 +44,7 @@ override_dh_auto_configure:
 						 --with-pic                                      \
 						 --with-pmix=/usr/lib/$(DEB_HOST_MULTIARCH)/pmix \
 						 --without-rpath                                 \
-						 --enable-slurmrestd                             \
-						 --enable-front-end --enable-multiple-slurmd $(ENABLEDEPRECATED)
+						 --enable-slurmrestd
 ifeq ($(WITH_EMULATOR),1)
 	DH_COMPAT=10 dh_auto_configure --builddirectory build-emulator -- -sysconfdir=/etc/slurm-llnl --with-munge --enable-pam --without-rpath --disable-debug --enable-front-end --enable-multiple-slurmd $(ENABLEDEPRECATED)
 endif
