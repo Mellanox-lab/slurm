@@ -1,3 +1,10 @@
+slurm-llnl (20.11.4.1-2) unstable; urgency=medium
+
+  * Port version v20.11.4 to Ubuntu 22.04
+  * Match configure option to one used in slurm.spec (RPM)
+
+ -- Yurii Shestakov <yuriis@nvidia.com>  Mon, 10 Dec 2022 02:12:00 +0200
+
 slurm-llnl (20.11.4.1-1) unstable; urgency=medium
 
   * Port version v20.11.4 to Ubuntu 20.04
